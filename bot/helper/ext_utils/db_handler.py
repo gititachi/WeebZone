@@ -30,13 +30,13 @@ class DbManger:
                  media boolean DEFAULT FALSE,
                  doc boolean DEFAULT FALSE,
                  pre text DEFAULT NULL,
-                 suf text DEFAULT NULL,
                  cap text DEFAULT NULL,
                  dump text DEFAULT NULL,
-                 rem text DEFAULT NULL,
                  paid boolean DEFAULT FALSE,
                  thumb bytea DEFAULT NULL,
-                 leechlog boolean DEFAULT FALSE)"""
+                 leechlog boolean DEFAULT FALSE,
+                 rem text DEFAULT NULL,
+                 suf text DEFAULT NULL)"""
         self.cur.execute(sql)
         sql = """CREATE TABLE IF NOT EXISTS rss (
                  name text,
