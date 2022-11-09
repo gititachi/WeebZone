@@ -30,13 +30,14 @@ class DbManger:
                  media boolean DEFAULT FALSE,
                  doc boolean DEFAULT FALSE,
                  pre text DEFAULT NULL,
+                 suf text DEFAULT NULL,
                  cap text DEFAULT NULL,
+                 rem text DEFAULT NULL,
                  dump text DEFAULT NULL,
                  paid boolean DEFAULT FALSE,
                  thumb bytea DEFAULT NULL,
-                 leechlog boolean DEFAULT FALSE,
-                 rem text DEFAULT NULL,
-                 suf text DEFAULT NULL)"""
+                 leechlog boolean DEFAULT FALSE
+                 )"""
         self.cur.execute(sql)
         sql = """CREATE TABLE IF NOT EXISTS rss (
                  name text,
@@ -69,23 +70,25 @@ class DbManger:
                 if row[5]:
                     PRE_DICT[row[0]] = row[5]
                 if row[6]:
-                    CAP_DICT[row[0]] = row[6]
+                    SUF_DICT[row[0]] = row[6]
                 if row[7]:
-                    LEECH_DICT[row[0]] = row[7]
-                if row[8] and row[0] not in PAID_USERS:
+                    CAP_DICT[row[0]] = row[7]
+                if row[8]:
+                    REM_DICT[row[0]] = row[8]
+                if row[9]:
+                    LEECH_DICT[row[0]] = row[9]
+                if row[10] and row[0] not in PAID_USERS:
                     PAID_USERS.add(row[0])
                 path = f"Thumbnails/{row[0]}.jpg"
-                if row[9] is not None and not ospath.exists(path):
+                if row[11] is not None and not ospath.exists(path):
                     if not ospath.exists('Thumbnails'):
                         makedirs('Thumbnails')
                     with open(path, 'wb+') as f:
-                        f.write(row[9])
-                if row[10] and row[0] not in LEECH_LOG:
+                        f.write(row[11])
+                if row[12] and row[0] not in LEECH_LOG:
                     LEECH_LOG.add(row[0])
-                if row[11]:
-                    REM_DICT[row[0]] = row[11]
-                if row[12]:
-                    SUF_DICT[row[0]] = row[12]
+
+
             LOGGER.info("Users data has been imported from Database")
         # Rss Data
         self.cur.execute("SELECT * FROM rss")
