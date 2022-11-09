@@ -76,74 +76,35 @@ class TgUploader:
 
     def __upload_file(self, up_path, file_, dirpath):
         fsize = ospath.getsize(up_path)
-        if fsize > 2097152000:
-            client = premium_session
-        else:
-            client = app
-        prefix = PRE_DICT.get(self.__listener.message.from_user.id, "")
-        PRENAME_X = prefix
-        caption = CAP_DICT.get(self.__listener.message.from_user.id, "")
-        CAPTION_X = caption
-        remname = REM_DICT.get(self.__listener.message.from_user.id, "")
-        REMNAME_X = remname
-        suffix = SUF_DICT.get(self.__listener.message.from_user.id, "")
-        SUFFIX_X = suffix
-        if len(PRENAME_X) != 0 or len(SUFFIX_X) !=0:
+        # Initial Values >>>>
+        client = premium_session if fsize > 2097152000 else client = app
+        PRENAME = PRE_DICT.get(self.__listener.message.from_user.id, "")
+        CAPTION = CAP_DICT.get(self.__listener.message.from_user.id, "")
+        REMNAME = REM_DICT.get(self.__listener.message.from_user.id, "")
+        SUFFIX = SUF_DICT.get(self.__listener.message.from_user.id, "")
+
+        if len(PRENAME) != 0 or len(SUFFIX) !=0:
             if file_.startswith('www'):
                 file_ = ' '.join(file_.split()[1:])
-                suffix = f" " + f"{SUFFIX_X}"
-                sufLen = len(suffix)
-                fileDict = file_.split('.')
-                _extIn = 1 + len(fileDict[-1])
-                _extOutName = '.'.join(fileDict[:-1]).replace('.', '_').replace('-', '_')
-                rm_word = f"{REMNAME_X}"
-                _extOutName = re.sub(rm_word, '', _extOutName)
-                _extOutName = re.sub("\s\s+", " ", _extOutName)
-                #if not _extOutName.endswith(suffix):
-                _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
-                if len(_extOutName) > (64 - (sufLen + _extIn)):
-                    _newExtFileName = (
-                        _extOutName[: 64 - (sufLen + _extIn)]
-                        + f"{suffix}.{fileDict[-1]}"
-                                )
-                        #_newExtFileName = file_
-         
-
-                #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
-                file_ = f"{_newExtFileName}"
-                file_ = f"{PRENAME_X} {file_}"
-                cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
-                cap = f"\n\n{CAPTION_X}\n\n"
-                new_path = ospath.join(dirpath, file_)
-                osrename(up_path, new_path)
-                up_path = new_path
-            else:
-                suffix = f" " + f"{SUFFIX_X}"
-                sufLen = len(suffix)
-                fileDict = file_.split('.')
-                _extIn = 1 + len(fileDict[-1])
-                _extOutName = '.'.join(fileDict[:-1]).replace('.', '_').replace('-', '_')
-                rm_word = f"{REMNAME_X}"
-                _extOutName = re.sub(rm_word, '', _extOutName)
-                _extOutName = re.sub("\s\s+", " ", _extOutName)
-                #if not _extOutName.endswith(suffix):
-                _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
-                if len(_extOutName) > (64 - (sufLen + _extIn)):
-                    _newExtFileName = (
-                        _extOutName[: 64 - (sufLen + _extIn)]
-                        + f"{suffix}.{fileDict[-1]}"
-                                )
-                #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
-                file_ = f"{_newExtFileName}"
-                file_ = f"{PRENAME_X} {file_}"
-                cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
-                cap = f"\n\n{CAPTION_X}\n\n"
-                new_path = ospath.join(dirpath, file_)
-                osrename(up_path, new_path)
-                up_path = new_path
-        else:
-            cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
-            cap = f"\n\n{CAPTION_X}\n\n"
+            suffix = f" {SUFFIX}"
+            sufLen = len(suffix)
+            fileDict = file_.split('.')
+            _extIn = 1 + len(fileDict[-1])
+            _extOutName = '.'.join(fileDict[:-1]).replace('.', '_').replace('-', '_')
+            _extOutName = re.sub(REMNAME, '', _extOutName)
+            _extOutName = re.sub("\s\s+", " ", _extOutName)
+            #if not _extOutName.endswith(suffix):
+            _newExtFileName = f"{_extOutName}{suffix}.{fileDict[-1]}"
+            if len(_extOutName) > (64 - (sufLen + _extIn)):
+                _newExtFileName = (
+                    _extOutName[: 64 - (sufLen + _extIn)]
+                    + f"{suffix}.{fileDict[-1]}"
+                            )
+            #file_ = f'{os.path.splitext(file_)[0] + suffix + os.path.splitext(file_)[1]}'
+            file_ = f"{PRENAME} {_newExtFileName}"
+            new_path = ospath.join(dirpath, file_)
+            osrename(up_path, new_path)
+            up_path = new_path
         # if CUSTOM_FILENAME is not None and prefix == '':
         #     cap_mono = f"<{CAPTION_FONT}>{CUSTOM_FILENAME} {file_}</{CAPTION_FONT}>"
         #     cap = f"\n\n{CAPTION_X}\n\n"
@@ -154,9 +115,12 @@ class TgUploader:
         # else:
         #     cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
         #     cap = f"\n\n{CAPTION_X}\n\n"
+        cap_mono = f"<{CAPTION_FONT}>{file_}</{CAPTION_FONT}>"
+        cap = f"\n\n{CAPTION}\n\n"
+
         dumpid = LEECH_DICT.get(self.__listener.message.from_user.id, "")
         if len(dumpid) != 0:
-            if fsize > 2097152000:
+            if fsize > 2097152000: #What Happened Here ?? ~ MysterySD to WeebZone
                 LEECH_X = int(dumpid)
             else:
                 LEECH_X = int(dumpid)
