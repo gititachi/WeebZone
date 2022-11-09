@@ -67,8 +67,8 @@ Custom Thumbnail <b>{thumbmsg}</b>
 PreName : <b>{prefix}</b>
 Suffix : <b>{suffix}</b>
 Caption : <b>{caption}</b>
-DumpID : <b>{dumpid}</b>
 Remname : <b>{remname}</b>
+DumpID : <b>{dumpid}</b>
 User Plan : <b>{uplan}</b>'''
     return text, button
 
@@ -141,17 +141,17 @@ def setLeechType(update, context):
             DbManger().user_cap(user_id, None)
         query.answer(text="Your Caption is Successfully Deleted!", show_alert=True)
         editLeechType(message, query)
-    elif data[2] == "dump":
-        LEECH_DICT.pop(user_id)
-        if DB_URI:
-            DbManger().user_dump(user_id, None)
-        query.answer(text="Your Dump ID is Successfully Deleted!", show_alert=True)
-        editLeechType(message, query)
     elif data[2] == "rem":
         REM_DICT.pop(user_id)
         if DB_URI:
             DbManger().user_rem(user_id, None)
         query.answer(text="Your Remname is Successfully Deleted!", show_alert=True)
+        editLeechType(message, query)
+    elif data[2] == "dump":
+        LEECH_DICT.pop(user_id)
+        if DB_URI:
+            DbManger().user_dump(user_id, None)
+        query.answer(text="Your Dump ID is Successfully Deleted!", show_alert=True)
         editLeechType(message, query)
     else:
         query.answer()
